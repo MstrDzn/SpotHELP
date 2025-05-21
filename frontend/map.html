@@ -1,16 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Leaflet Map Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    #map { height: 100vh; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    #map {
+      height: calc(100vh - 4rem - 5rem); /* adjust for header (4rem) and footer (~5rem) */
+      width: 100%;
+    }
   </style>
 </head>
+<body class="flex flex-col min-h-screen text-gray-800">
 
-<body>
-  <div id="map"></div>
+  <!-- Header -->
+  <header class="bg-white shadow-md h-16 flex items-center sticky top-0 z-50">
+    <div class="container mx-auto px-4 flex justify-between items-center w-full">
+      <a href="#" class="text-xl font-bold text-blue-600">MapPortal</a>
+      <nav class="hidden md:flex space-x-4">
+        <a href="#" class="text-gray-700 hover:text-blue-600">Home</a>
+        <a href="#" class="text-gray-700 hover:text-blue-600">Map</a>
+        <a href="#" class="text-gray-700 hover:text-blue-600">About</a>
+        <a href="#" class="text-gray-700 hover:text-blue-600">Contact</a>
+      </nav>
+      <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Login</a>
+    </div>
+  </header>
 
+  <!-- Map -->
+  <main class="flex-grow">
+    <div id="map"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 border-t py-6 text-center text-sm">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+      <p class="text-gray-500">&copy; 2025 MapPortal. All rights reserved.</p>
+      <div class="space-x-4">
+        <a href="#" class="text-gray-500 hover:text-blue-600">Privacy Policy</a>
+        <a href="#" class="text-gray-500 hover:text-blue-600">Terms</a>
+        <a href="#" class="text-gray-500 hover:text-blue-600">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const map = L.map('map').setView([48.8566, 2.3522], 13);
