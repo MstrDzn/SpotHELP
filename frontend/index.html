@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>SpotHelp – Carte des lieux</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Leaflet CSS (sans integrity pour éviter les erreurs de hash) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Tailwind CSS (optionnel, pour la mise en forme rapide) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    /* On soustrait 4rem (header) + 5rem (footer) pour que la carte prenne tout l’espace restant */
+    #map {
+      height: calc(100vh - 4rem - 5rem);
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen text-gray-800">
+
+  <!-- Header -->
+  <header class="bg-white shadow-md h-16 flex items-center sticky top-0 z-50">
+    <div class="container mx-auto px-4 flex justify-between items-center w-full">
+      <!-- Logo + titre SpotHelp -->
+      <a href="#" class="flex items-center space-x-2">
+        <img
+          src="assets/logo.jpg"
+          alt="SpotHelp logo"
+          class="h-14 w-14 object-contain"
+        />
+        <span class="text-xl font-bold text-blue-600">SpotHelp</span>
+      </a>
+
+      <!-- Menu de navigation -->
+      <nav class="hidden md:flex space-x-4">
+        <a href="#" class="text-gray-700 hover:text-blue-600">Home</a>
+        <a href="#" class="text-gray-700 hover:text-blue-600">Map</a>
+        <a href="#" class="text-gray-700 hover:text-blue-600">About</a>
+        <a href="#" class="text-gray-700 hover:text-blue-600">Contact</a>
+      </nav>
+
+      <!-- Bouton Login -->
+      <a
+        href="#"
+        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+      >
+        Login
+      </a>
+    </div>
+  </header>
+
+  <!-- Zone de filtres -->
+  <section class="bg-white py-2 shadow-sm">
+    <div class="container mx-auto px-4 flex space-x-4">
+      <!-- Checkbox pour type Nourriture -->
+      <label class="inline-flex items-center space-x-1">
+        <input
+          type="checkbox"
+          value="nourriture"
+          class="filter-checkbox"
+          checked
+        />
+        <span class="text-gray-700">Nourriture</span>
+      </label>
+
+      <!-- Checkbox pour type Social -->
+      <label class="inline-flex items-center space-x-1">
+        <input
+          type="checkbox"
+          value="social"
+          class="filter-checkbox"
+          checked
+        />
+        <span class="text-gray-700">Social</span>
+      </label>
+
+      <!-- Checkbox pour type Santé -->
+      <label class="inline-flex items-center space-x-1">
+        <input
+          type="checkbox"
+          value="santé"
+          class="filter-checkbox"
+          checked
+        />
+        <span class="text-gray-700">Santé</span>
+      </label>
+
+      <!-- Ajoute autant de labels/checkbox que nécessaire pour d'autres catégories -->
+    </div>
+  </section>
+
+  <!-- Conteneur de la carte Leaflet -->
+  <main class="flex-grow">
+    <div id="map"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 border-t py-6 text-center text-sm">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+      <p class="text-gray-500">&copy; 2025 SpotHelp. Tous droits réservés.</p>
+      <div class="space-x-4">
+        <a href="#" class="text-gray-500 hover:text-blue-600">Politique de confidentialité</a>
+        <a href="#" class="text-gray-500 hover:text-blue-600">Mentions légales</a>
+        <a href="#" class="text-gray-500 hover:text-blue-600">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Notre code JS pour la carte et les filtres -->
+  <script src="script.js"></script>
+</body>
+</html>
