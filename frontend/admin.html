@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>SpotHelp – Back‐office</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- (Optionnel) Tailwind pour la mise en forme rapide -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Corps de page */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
+    /* Table de listing */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f3f4f6;
+    }
+
+    /* Boutons d’action */
+    .btn {
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      border: none;
+      color: white;
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+    .btn-edit {
+      background-color: #3b82f6; /* bleu */
+    }
+    .btn-delete {
+      background-color: #ef4444; /* rouge */
+    }
+
+    /* Modal d’édition */
+    #edit-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;          /* caché par défaut */
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    #edit-modal .modal-content {
+      background: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    #edit-modal label {
+      display: block;
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+    #edit-modal input,
+    #edit-modal select {
+      width: 100%;
+      padding: 0.25rem;
+      margin-top: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+  <header class="bg-white shadow-md p-4">
+    <h1 class="text-2xl font-bold text-gray-800">Back‐office SpotHelp</h1>
+    <p class="text-sm text-gray-600">
+      Gérez ici vos tiers‐lieux (modifier / supprimer).
+    </p>
+  </header>
+
+  <main class="container mx-auto p-4">
+    <!-- … -->
+<main class="container mx-auto p-4">
+
+    <!-- FORMULAIRE « Ajouter un lieu » -->
+    <section class="mb-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">Ajouter un nouveau lieu</h2>
+      <form id="add-form" class="bg-white p-4 rounded shadow-sm space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Champ Nom -->
+          <div>
+            <label for="add-nom" class="block text-sm font-medium text-gray-700">Nom :</label>
+            <input type="text" id="add-nom" class="mt-1 block w-full border-gray-300 rounded-md" required />
+          </div>
+  
+          <!-- Champ Type -->
+          <div>
+            <label for="add-type" class="block text-sm font-medium text-gray-700">Type :</label>
+            <select id="add-type" class="mt-1 block w-full border-gray-300 rounded-md" required>
+              <option value="nourriture">Nourriture</option>
+              <option value="social">Social</option>
+              <option value="santé">Santé</option>
+              <option value="tourisme">Tourisme</option>
+              <!-- Ajoutez si besoin d’autres types -->
+            </select>
+          </div>
+  
+          <!-- Champ Adresse -->
+          <div class="md:col-span-2">
+            <label for="add-adresse" class="block text-sm font-medium text-gray-700">Adresse :</label>
+            <input type="text" id="add-adresse" class="mt-1 block w-full border-gray-300 rounded-md" required />
+          </div>
+  
+          <!-- Champ Latitude -->
+          <div>
+            <label for="add-lat" class="block text-sm font-medium text-gray-700">Latitude :</label>
+            <input type="number" step="0.00001" id="add-lat" class="mt-1 block w-full border-gray-300 rounded-md" required />
+          </div>
+  
+          <!-- Champ Longitude -->
+          <div>
+            <label for="add-lng" class="block text-sm font-medium text-gray-700">Longitude :</label>
+            <input type="number" step="0.00001" id="add-lng" class="mt-1 block w-full border-gray-300 rounded-md" required />
+          </div>
+        </div>
+  
+        <div class="flex justify-end">
+          <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            Ajouter
+          </button>
+        </div>
+      </form>
+    </section>
+  
+    <!-- Tableau des lieux (existant) -->
+    <table class="shadow-sm bg-white">
+      <!-- … en-têtes … -->
+      <tbody id="tbody-lieux">
+        <!-- lignes injectées par JavaScript -->
+      </tbody>
+    </table>
+  
+  </main>
+
+  
+    <!-- Tableau des lieux -->
+    <table class="shadow-sm bg-white">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Type</th>
+          <th>Adresse</th>
+          <th>Latitude</th>
+          <th>Longitude</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-lieux">
+        <!-- Les lignes seront injectées par JavaScript -->
+      </tbody>
+    </table>
+  </main>
+
+  <!-- Modal d’édition -->
+  <div id="edit-modal">
+    <div class="modal-content">
+      <h2 class="text-xl font-semibold text-gray-800">Modifier le lieu</h2>
+      <form id="edit-form" class="mt-4">
+        <input type="hidden" id="edit-id" />
+
+        <label for="edit-nom">Nom :</label>
+        <input type="text" id="edit-nom" required />
+
+        <label for="edit-type">Type :</label>
+        <select id="edit-type" required>
+          <option value="nourriture">Nourriture</option>
+          <option value="social">Social</option>
+          <option value="santé">Santé</option>
+          <option value="tourisme">Tourisme</option>
+        </select>
+
+        <label for="edit-adresse">Adresse :</label>
+        <input type="text" id="edit-adresse" required />
+
+        <label for="edit-lat">Latitude :</label>
+        <input type="number" step="0.00001" id="edit-lat" required />
+
+        <label for="edit-lng">Longitude :</label>
+        <input type="number" step="0.00001" id="edit-lng" required />
+
+        <div class="mt-4 flex justify-end space-x-2">
+          <button
+            type="button"
+            id="edit-cancel"
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded"
+          >
+            Enregistrer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script de gestion Back‐office -->
+  <script>
+    // 1. Cibler le <tbody> pour injecter dynamiquement les lignes
+    const tbody = document.getElementById("tbody-lieux");
+
+    // 2. Fonction qui charge tous les lieux depuis le backend et remplit le tableau
+    async function loadAdminLieux() {
+      try {
+        // Récupérer la liste des lieux
+        const res = await fetch("http://localhost:3000/lieux");
+        const lieux = await res.json();
+
+        // Vider le <tbody> avant de ré-injecter
+        tbody.innerHTML = "";
+
+        // Pour chaque lieu, créer une ligne <tr> et l’ajouter
+        lieux.forEach((lieu) => {
+          const tr = document.createElement("tr");
+          tr.classList.add("hover:bg-gray-100");
+
+          tr.innerHTML = `
+            <td class="border px-2 py-1">${lieu.id}</td>
+            <td class="border px-2 py-1">${lieu.nom}</td>
+            <td class="border px-2 py-1">${lieu.type}</td>
+            <td class="border px-2 py-1">${lieu.adresse}</td>
+            <td class="border px-2 py-1">${lieu.lat}</td>
+            <td class="border px-2 py-1">${lieu.lng}</td>
+            <td class="border px-2 py-1 space-x-1">
+              <button class="btn btn-edit" data-id="${lieu.id}">✎ Modifier</button>
+              <button class="btn btn-delete" data-id="${lieu.id}">🗑 Supprimer</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // 3. Attacher les événements “click” sur tous les boutons SUPPRIMER
+        document.querySelectorAll(".btn-delete").forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            const id = e.target.dataset.id;
+            if (!confirm(`Confirmez-vous la suppression du lieu #${id} ?`))
+              return;
+            await fetch(`http://localhost:3000/lieux/${id}`, {
+              method: "DELETE",
+            });
+            loadAdminLieux(); // Recharger la liste après suppression
+          });
+        });
+
+        // 4. Attacher les événements “click” sur tous les boutons MODIFIER
+        document.querySelectorAll(".btn-edit").forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            const id = e.target.dataset.id;
+            // Récupérer la liste complète pour isoler l’élément “lieu”
+            const resAll = await fetch("http://localhost:3000/lieux");
+            const allLieux = await resAll.json();
+            const lieu = allLieux.find((l) => l.id == id);
+            if (!lieu) {
+              alert("Lieu introuvable.");
+              return;
+            }
+
+            // Remplir le formulaire d’édition
+            document.getElementById("edit-id").value = lieu.id;
+            document.getElementById("edit-nom").value = lieu.nom;
+            document.getElementById("edit-type").value = lieu.type;
+            document.getElementById("edit-adresse").value = lieu.adresse;
+            document.getElementById("edit-lat").value = lieu.lat;
+            document.getElementById("edit-lng").value = lieu.lng;
+
+            // Afficher le modal
+            document.getElementById("edit-modal").style.display = "flex";
+          });
+        });
+      } catch (err) {
+        console.error("Erreur chargement back-office :", err);
+      }
+    }
+
+    // 5. Gérer l’envoi du formulaire d’édition (méthode PUT)
+    const editForm = document.getElementById("edit-form");
+    editForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("edit-id").value;
+      const nom = document.getElementById("edit-nom").value.trim();
+      const type = document.getElementById("edit-type").value;
+      const adresse = document.getElementById("edit-adresse").value.trim();
+      const lat = parseFloat(document.getElementById("edit-lat").value);
+      const lng = parseFloat(document.getElementById("edit-lng").value);
+
+      try {
+        await fetch(`http://localhost:3000/lieux/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nom, type, adresse, lat, lng }),
+        });
+        // Cacher le modal puis recharger la liste
+        document.getElementById("edit-modal").style.display = "none";
+        loadAdminLieux();
+      } catch (err) {
+        console.error("Erreur PUT back-office :", err);
+      }
+    });
+
+    // 6. Gérer l’annulation de l’édition (bouton “Annuler”)
+    document.getElementById("edit-cancel").addEventListener("click", () => {
+      document.getElementById("edit-modal").style.display = "none";
+    });
+
+    // 7. Au chargement de la page, appeler loadAdminLieux()
+    document.addEventListener("DOMContentLoaded", () => {
+      loadAdminLieux();
+    });
+
+    const addForm = document.getElementById('add-form');
+    addForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Récupérer les valeurs saisies
+      const nom = document.getElementById('add-nom').value.trim();
+      const type = document.getElementById('add-type').value;
+      const adresse = document.getElementById('add-adresse').value.trim();
+      const lat = parseFloat(document.getElementById('add-lat').value);
+      const lng = parseFloat(document.getElementById('add-lng').value);
+
+      // Vérification basique (vous pouvez développer si besoin)
+      if (!nom || !type || !adresse || isNaN(lat) || isNaN(lng)) {
+        alert('Merci de remplir tous les champs correctement.');
+        return;
+      }
+
+      try {
+        // Envoi de la requête POST au backend
+        const response = await fetch('http://localhost:3000/lieux', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nom, type, adresse, lat, lng })
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.error || 'Erreur lors de l’ajout du lieu.');
+        }
+
+        // Réinitialisation du formulaire
+        addForm.reset();
+
+        // On raffraîchit la liste pour afficher le nouveau lieu
+        loadAdminLieux();
+
+      } catch (err) {
+        console.error('Erreur POST back-office :', err);
+        alert('Impossible d’ajouter le lieu. Vérifiez la console pour plus de détails.');
+      }
+    });
+  </script>
+</body>
+</html>

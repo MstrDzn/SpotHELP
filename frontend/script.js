@@ -23,7 +23,7 @@ function loadMarkers() {
           map.removeLayer(m);
         });
       }
-      // Réinitialiser l'objet
+      // Réinitialiser l’objet markersByType
       Object.keys(markersByType).forEach((key) => delete markersByType[key]);
 
       // 3.2. Pour chaque lieu renvoyé par le backend, on crée et stocke un marqueur
@@ -33,11 +33,13 @@ function loadMarkers() {
         // Créer le marqueur à [lat, lng]
         const m = L.marker([lat, lng]);
 
-        // Lier un popup avec les infos
+        // Lier un popup avec les infos complètes
         m.bindPopup(`
-          <strong>${nom}</strong><br>
-          Type : ${type}<br>
-          Adresse : ${adresse}
+          <div style="min-width:180px">
+            <strong>${nom}</strong><br>
+            <em>Type&nbsp;:</em> ${type}<br>
+            <em>Adresse&nbsp;:</em> ${adresse}
+          </div>
         `);
 
         // Ajouter ce marqueur dans le tableau de son type
