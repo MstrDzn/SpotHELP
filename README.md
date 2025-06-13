@@ -11,7 +11,7 @@ Ce document explique comment mettre en place l'application **SpotHELP** sur un p
 ## 2. Récupération du code
 
 ```bash
-git clone <url-du-repo>  # remplacez par l'URL de votre fork
+git clone https://github.com/MstrDzn/SpotHELP
 cd SpotHELP
 ```
 
